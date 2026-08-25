@@ -149,7 +149,7 @@
     </div>
     <div class="bubble">
       <select id="ApplyType" name="ApplyType" required>
-        <option value="" disabled selected>請選擇求職類</option>
+        <option value="" disabled selected>請選擇求職類型</option>
         <option value="Full Time - 全職">Full Time - 全職</option>
         <option value="Part Time - 兼職">Part Time - 兼職</option>
       </select>
@@ -242,7 +242,7 @@
 
       // ✅ 2. 組 WhatsApp 訊息
       const waMsg = "你好，我剛提交咗課程報名：\n" +
-        "課程：" + payload.ApplyType + "\n" +
+        "求職類型：" + payload.ApplyType + "\n" +
         "聯絡人：" + payload.contactPerson + "\n" +
         "電話：" + payload.phone + "\n" +
         "諮詢：" + payload.message;
