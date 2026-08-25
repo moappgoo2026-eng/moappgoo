@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mummy Pancake 求職報名</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Microsoft JhengHei", sans-serif;
+      background: #e5ddd5;
+    }
+
+    .chat-container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
+      padding-bottom: 130px;
+    }
+
+    .system-wrapper {
+      text-align: center;
+      margin: 12px 0;
+    }
+
+    .system-msg {
+      display: inline-block;
+      background: #e2f4cb;
+      color: #555;
+      font-size: 13px;
+      padding: 6px 12px;
+      border-radius: 12px;
+    }
+
+    .bubble {
+      background: #dcf8c6;
+      padding: 14px 16px;
+      border-radius: 18px;
+      margin-bottom: 12px;
+      max-width: 85%;
+      margin-left: auto;
+      position: relative;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    }
+
+    .bubble::after {
+      content: "";
+      position: absolute;
+      right: -6px;
+      top: 14px;
+      width: 0;
+      height: 0;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 8px solid #dcf8c6;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: none;
+      font-size: 16px;
+      background: transparent;
+      outline: none;
+      resize: vertical;
+    }
+
+    textarea {
+      min-height: 80px;
+    }
+
+    #feeInfo {
+      display: none;
+      background: #fff3cd;
+      color: #856404;
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      white-space: pre-line;
+    }
+
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #f0f0f0;
+      padding: 12px 16px;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
+    }
+
+    .send-btn {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      display: block;
+      background: #25d366;
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 16px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+
+    #status {
+      text-align: center;
+      font-size: 14px;
+      color: #333;
+      margin-top: 10px;
+    }
+
+    /* ✅ WhatsApp 綠色大掣 */
+    .wa-button {
+      display: block;
+      width: 90%;
+      max-width: 320px;
+      margin: 14px auto 0;
+      background: #25d366;
+      color: #fff;
+      font-size: 17px;
+      font-weight: bold;
+      text-align: center;
+      padding: 16px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .wa-button:hover {
+      background: #1ebe5d;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="chat-container">
+  <div class="system-wrapper">
+    <div class="system-msg">求職報名表單</div>
+  </div>
+
+  <form id="contactForm">
+    <div class="system-wrapper">
+      <div class="system-msg">請選擇求職類型</div>
+    </div>
+    <div class="bubble">
+      <select id="ApplyType" name="ApplyType" required>
+        <option value="" disabled selected>請選擇求職類</option>
+        <option value="Full Time - 全職">Full Time - 全職</option>
+        <option value="Part Time - 兼職">Part Time - 兼職</option>
+      </select>
+    </div>
+
+    <div id="feeInfo"></div>
+
+    <div class="system-wrapper">
+      <div class="system-msg">請輸入聯絡人姓名</div>
+    </div>
+    <div class="bubble">
+      <input id="contactPerson" name="contactPerson" type="text" required placeholder="例如：陳大文" />
+    </div>
+
+    <div class="system-wrapper">
+      <div class="system-msg">請輸入聯絡電話</div>
+    </div>
+    <div class="bubble">
+      <input id="phone" name="phone" type="tel" placeholder="例如：6xxxxxxx" />
+    </div>
+
+    <div class="system-wrapper">
+      <div class="system-msg">聯絡電郵（選填）</div>
+    </div>
+    <div class="bubble">
+      <input id="email" name="email" type="email" placeholder="example@email.com" />
+    </div>
+
+    <div class="system-wrapper">
+      <div class="system-msg">請輸入諮詢內容</div>
+    </div>
+    <div class="bubble">
+      <textarea id="message" name="message" required placeholder="想了解求職內容、地點、時間、薪資等"></textarea>
+    </div>
+  </form>
+</div>
+
+<div class="bottom-bar">
+  <button type="submit" form="contactForm" class="send-btn">送出</button>
+  <div id="status"></div>
+</div>
+
+<script>
+  const form = document.getElementById("contactForm");
+  const status = document.getElementById("status");
+  const feeInfo = document.getElementById("feeInfo");
+  const ApplySelect = document.getElementById("Apply");
+
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzKgjOIGDw-h4ke-tv6vp-gVBRdu0EXJsPcluT9pNugLQYCSKy-9tx11dOnWeYmEjFymg/exec";
+
+  const WA_NUMBER = "85311111111";
+  const WECHAT_ID = "11111111";
+
+  const TypeDesc = {
+    "Full Time - 全職": "Monday - Sunday; shift A 10:00am - 7:00pm / shift B 12:30pm - 9:30 pm 🎉 1 hr lunch break",
+    "Part Time - 兼職": "EveryNight 7:30 pm - 9:30pm",
+  };
+
+  ApplySelect.addEventListener("change", () => {
+    const selected = ApplySelect.value;
+    if (TypeDesc[selected]) {
+      feeInfo.textContent = "💰 " + TypeDesc[selected];
+      feeInfo.style.display = "block";
+    } else {
+      feeInfo.style.display = "none";
+    }
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    status.textContent = "送出中...";
+
+    const payload = {
+      ApplyType: form.ApplyType.value,
+      contactPerson: form.contactPerson.value.trim(),
+      phone: form.phone.value.trim(),
+      email: form.email.value.trim(),
+      message: form.message.value.trim()
+    };
+
+    fetch(WEB_APP_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+    .then(() => {
+      // ✅ 1. 成功提示
+      status.innerHTML = "✅ 已收到報名<br>如需即時溝通，請按下方按鈕打開 WhatsApp：";
+
+      // ✅ 2. 組 WhatsApp 訊息
+      const waMsg = "你好，我剛提交咗課程報名：\n" +
+        "課程：" + payload.ApplyType + "\n" +
+        "聯絡人：" + payload.contactPerson + "\n" +
+        "電話：" + payload.phone + "\n" +
+        "諮詢：" + payload.message;
+
+      const waUrl = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(waMsg);
+
+      // ✅ 3. 顯示「打開 WhatsApp」綠色大掣（真人撳，iOS 最穩）
+      if (!document.getElementById("waBtn")) {
+        const waBtn = document.createElement("a");
+        waBtn.id = "waBtn";
+        waBtn.href = waUrl;
+        waBtn.target = "_blank";
+        waBtn.innerHTML = "💬 打開 WhatsApp 同我傾";
+        waBtn.className = "wa-button";
+        status.after(waBtn);
+      }
+
+      // ✅ 4. 顯示浮動微信按鈕
+      showFloatingWeChatButton();
+
+      // ✅ 5. 重設表單
+      form.reset();
+      feeInfo.style.display = "none";
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    })
+    .catch(() => {
+      status.textContent = "❌ 送出失敗，請稍後再試。";
+    });
+  });
+
+  function showFloatingWeChatButton() {
+    if (document.getElementById("floatingWxBtn")) return;
+
+    const btn = document.createElement("div");
+    btn.id = "floatingWxBtn";
+    btn.innerHTML = "💬 微信";
+    btn.style.cssText = `
+      position: fixed;
+      right: 16px;
+      bottom: 90px;
+      background: #07c160;
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+      padding: 12px 18px;
+      border-radius: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      cursor: pointer;
+      z-index: 9999;
+    `;
+
+    btn.addEventListener("click", () => {
+      navigator.clipboard.writeText(WECHAT_ID).then(() => {
+        btn.innerHTML = "✅ 已複製";
+        setTimeout(() => {
+          btn.innerHTML = "💬 微信";
+        }, 2000);
+      });
+    });
+
+    document.body.appendChild(btn);
+
+    setTimeout(() => {
+      if (btn.parentNode) btn.parentNode.removeChild(btn);
+    }, 15000);
+  }
+</script>
+
+</body>
+</html>
